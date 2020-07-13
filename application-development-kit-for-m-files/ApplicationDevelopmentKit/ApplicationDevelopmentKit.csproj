@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Build.Locator.1.2.6\build\Microsoft.Build.Locator.props" Condition="Exists('..\packages\Microsoft.Build.Locator.1.2.6\build\Microsoft.Build.Locator.props')" />
+  <Import Project="..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.6\build\Microsoft.CodeAnalysis.Analyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.6\build\Microsoft.CodeAnalysis.Analyzers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B2BEBB89-C781-4CE2-B378-224B8A88F121}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MFilesApplicationDevelopmentKit</RootNamespace>
+    <AssemblyName>MFilesApplicationDevelopmentKit</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Interop.MFilesAPI, Version=7.0.0.0, Culture=neutral, PublicKeyToken=f1b4733f444f7ad0, processorArchitecture=MSIL">
+      <HintPath>..\packages\MFiles.VAF.2.1.0.15\lib\net45\Interop.MFilesAPI.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="MFiles.Crypto, Version=2.1.0.15, Culture=neutral, PublicKeyToken=fa007b370d17fe5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\MFiles.VAF.2.1.0.15\lib\net45\MFiles.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="MFiles.VAF, Version=2.1.0.15, Culture=neutral, PublicKeyToken=fa007b370d17fe5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\MFiles.VAF.2.1.0.15\lib\net45\MFiles.VAF.dll</HintPath>
+    </Reference>
+    <Reference Include="MFiles.VAF.Configuration, Version=2.1.0.15, Culture=neutral, PublicKeyToken=fa007b370d17fe5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\MFiles.VAF.2.1.0.15\lib\net45\MFiles.VAF.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Build, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Build.16.4.0\lib\net472\Microsoft.Build.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Build.Locator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9dff12846e04bfbd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Build.Locator.1.2.6\lib\net46\Microsoft.Build.Locator.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis, Version=3.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.3.4.0\lib\netstandard2.0\Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=3.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.3.4.0\lib\netstandard2.0\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.CommandLineUtils, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.CommandLineUtils.1.1.1\lib\net451\Microsoft.Extensions.CommandLineUtils.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\MFiles.VAF.2.1.0.15\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Reflection" />
+    <Reference Include="System.Reflection.Metadata, Version=1.4.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.1.6.0\lib\netstandard2.0\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbstractionLayerGenerator\Api\Api.cs" />
+    <Compile Include="AbstractionLayerGenerator\Api\Common.cs" />
+    <Compile Include="AbstractionLayerGenerator\Api\Generator.cs" />
+    <Compile Include="AbstractionLayerGenerator\Api\Settings.cs" />
+    <Compile Include="AbstractionLayerGenerator\Api\Structure.cs" />
+    <Compile Include="AbstractionLayerGenerator\Factories\FilesWriterFactory.cs" />
+    <Compile Include="AbstractionLayerGenerator\Implementations\VaultApplicationFilesWriter.cs" />
+    <Compile Include="AbstractionLayerGenerator\Implementations\EventHandlersFilesWriter.cs" />
+    <Compile Include="AbstractionLayerGenerator\Implementations\InterfacesFilesWriter.cs" />
+    <Compile Include="AbstractionLayerGenerator\Implementations\ModelsFilesWriter.cs" />
+    <Compile Include="AbstractionLayerGenerator\Implementations\SettingsFilesWriter.cs" />
+    <Compile Include="AbstractionLayerGenerator\Implementations\UtilitiesFilesWriter.cs" />
+    <Compile Include="AbstractionLayerGenerator\Interfaces\ALFilesWriter.cs" />
+    <Compile Include="AbstractionLayerGenerator\Utilities\BuildUtils.cs" />
+    <Compile Include="AbstractionLayerGenerator\Utilities\MFilesConnection.cs" />
+    <Compile Include="AbstractionLayerGenerator\Utilities\SecurityUtils.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\CLIDevelopmentKit.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\CommandLineOptions.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\Configurations\DeployCommandConfiguration.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\Configurations\NewCommandConfiguration.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\Configurations\RootCommandConfiguration.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\Configurations\UpdateCommandConfiguration.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\ICommand.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\Implementations\DeployCommand.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\Implementations\NewCommand.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\Implementations\RootCommand.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\Implementations\UpdateCommand.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\CommandPrompt\CommandPromptDevelopmentKit.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\CommandPrompt\Commands.cs" />
+    <Compile Include="AbstractionLayerGenerator\CLI\Handlers.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VaultApplicationDeployer\MFilesExceptionHelper.cs" />
+    <Compile Include="VaultApplicationDeployer\MFVaultApplicationInstaller.cs" />
+    <Compile Include="VaultApplicationDeployer\RetryingVaultConnection.cs" />
+    <Compile Include="VaultApplicationDeployer\VAEBuilder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AbstractionLayerGenerator\Files\EventHandlers\Document.txt" />
+    <Content Include="AbstractionLayerGenerator\Files\Utilities\MFilesAPIConnection.txt" />
+    <Content Include="AbstractionLayerGenerator\Files\VaultApplication\VaultApplication.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.6\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.6\build\Microsoft.CodeAnalysis.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.6\build\Microsoft.CodeAnalysis.Analyzers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Build.Locator.1.2.6\build\Microsoft.Build.Locator.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Build.Locator.1.2.6\build\Microsoft.Build.Locator.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Build.Locator.1.2.6\build\Microsoft.Build.Locator.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Build.Locator.1.2.6\build\Microsoft.Build.Locator.targets'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.Build.Locator.1.2.6\build\Microsoft.Build.Locator.targets" Condition="Exists('..\packages\Microsoft.Build.Locator.1.2.6\build\Microsoft.Build.Locator.targets')" />
+</Project>

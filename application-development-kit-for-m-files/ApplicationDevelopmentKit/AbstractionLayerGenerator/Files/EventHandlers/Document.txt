@@ -1,0 +1,18 @@
+﻿//------------------------------------------------------------------------------------
+// You may use this code snippet as reference for implementing event handler classes/methods
+//------------------------------------------------------------------------------------
+
+/*
+namespace ?namespace
+{
+	public class Document : OT_Document
+	{
+		[MFEventHandlerBeforeCheckInChanges]
+		void checkin()
+		{
+			if (VersionNumber == 1)
+				Name_or_title += $" [version 1 {CreatedDate.ToString("yyyy-MM-dd")}]";
+		}
+	}
+}
+*/
