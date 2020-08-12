@@ -511,6 +511,7 @@ namespace ApplicationDevelopmentKit
 			MFBuiltInPropertyDef.MFBuiltInPropertyDefWorkflow,
 			MFBuiltInPropertyDef.MFBuiltInPropertyDefState,
 			MFBuiltInPropertyDef.MFBuiltInPropertyDefKeywords,
+			MFBuiltInPropertyDef.MFBuiltInPropertyDefCreatedBy,
 			MFBuiltInPropertyDef.MFBuiltInPropertyDefLastModifiedBy
 		};
 		private bool IsInMandatoryBuiltInPropertyDefinitions(int propertyDefId)

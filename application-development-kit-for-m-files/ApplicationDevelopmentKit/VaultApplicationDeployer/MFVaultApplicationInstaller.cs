@@ -49,7 +49,8 @@ namespace ApplicationDevelopmentKit
 #endif
             try {
                 Console.WriteLine($"[INFO] Building VAF project...");
-                BuildUtils.BuildProject();
+                BuildErrorConsoleLogger errorLogger = new BuildErrorConsoleLogger();
+                BuildUtils.BuildProject(errorLogger);
                 Console.WriteLine($"[INFO] Sucessfully built VAF project...");
                 DirectoryInfo applicationPath = new DirectoryInfo(appPathStr);
                 FileInfo appDefFile = new FileInfo(Path.Combine(applicationPath.FullName, "appdef.xml"));

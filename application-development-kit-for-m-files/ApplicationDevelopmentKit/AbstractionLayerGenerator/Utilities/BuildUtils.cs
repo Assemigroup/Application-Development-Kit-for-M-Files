@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 
 using Microsoft.Build.Evaluation;
+using Microsoft.Build.Framework;
 
 namespace ApplicationDevelopmentKit
 {
@@ -35,7 +36,7 @@ namespace ApplicationDevelopmentKit
 			VAFProject.Save();
 		}
 
-		public static void BuildProject()
+		public static void BuildProject(ILogger logger = null)
 		{
 			DirectoryInfo vafDirectoryInfo = ALFilesWriter.GetMFTargetDirectoryInfo();
 			if (!vafDirectoryInfo.Exists)
@@ -46,7 +47,7 @@ namespace ApplicationDevelopmentKit
 #if !DEBUG
 			BuildUtils.VAFProject.SetProperty("Configuration", "Release");
 #endif
-			bool isBuildSuccessfull = BuildUtils.VAFProject.Build();
+			bool isBuildSuccessfull = logger != null ? VAFProject.Build(logger) : VAFProject.Build();
 			if (!isBuildSuccessfull) {
 				throw new Exception($"Compile issue(s) found in VAF project...");
 			}
