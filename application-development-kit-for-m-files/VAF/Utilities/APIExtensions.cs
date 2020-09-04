@@ -17,14 +17,27 @@ namespace VAF
 {
 	public static class APIExtensions
 	{
-		public static bool create(this ObjVerEx objVerEx, int typeId)
+		public static bool create(this ObjVerEx objVerEx, int typeId, int? createdby_mfuserid = null)
 		{
 			try {
 				ObjectVersionAndProperties objVerAndProps =
-					objVerEx.Vault.ObjectOperations.CreateNewObjectEx(typeId, objVerEx.Properties);
-				objVerEx.ObjVer.ID = objVerAndProps.ObjVer.ID;
-				objVerEx.ObjVer.Version = objVerAndProps.ObjVer.Version;
+					objVerEx.Vault.ObjectOperations.CreateNewObjectEx(typeId, objVerEx.Properties, null, false, createdby_mfuserid == null);
+
+				int objVerID = objVerAndProps.ObjVer.ID;
+				int objVersion = objVerAndProps.ObjVer.Version;
+
+				if (createdby_mfuserid != null) {
+					TypedValue created_by = new TypedValue();
+					created_by.SetValue(MFDataType.MFDatatypeLookup, createdby_mfuserid.Value);
+					objVerAndProps = objVerEx.Vault.ObjectPropertyOperations.SetCreationInfoAdmin(objVerAndProps.ObjVer, true, created_by, false, null);
+					ObjectVersion objver = objVerEx.Vault.ObjectOperations.CheckIn(objVerAndProps.ObjVer);
+					objVerID = objver.ObjVer.ID;
+					objVersion = objver.ObjVer.Version;
+				}
+				objVerEx.ObjVer.ID = objVerID;
+				objVerEx.ObjVer.Version = objVersion;
 				objVerEx.ObjVer.Type = objVerAndProps.ObjVer.Type;
+
 				return true;
 			} catch (Exception exception) {
 				throw exception;
@@ -434,7 +447,7 @@ namespace VAF
 				throw;
 			}
 		}
-		public static OT_Document create_singlefile_doc(this OT_Document doc, string filepath)
+		public static OT_Document create_singlefile_doc(this OT_Document doc, string filepath, int? createdby_mfuserid = null)
 		{
 			FileInfo fi = new FileInfo(filepath);
 			ObjectVersionAndProperties obj = doc.objVerEx.Vault.ObjectOperations.CreateNewSFDObject(OT_Document.TypeID, doc.objVerEx.Properties,
@@ -442,10 +455,17 @@ namespace VAF
 					SourceFilePath = fi.FullName,
 					Title = fi.Name.Replace(fi.Extension, ""),
 					Extension = fi.Extension.Replace(".", "")
-				}, true);
+				}, createdby_mfuserid == null);
+			if (createdby_mfuserid != null) {
+				TypedValue created_by = new TypedValue();
+				created_by.SetValue(MFDataType.MFDatatypeLookup, createdby_mfuserid.Value);
+				obj = doc.objVerEx.Vault.ObjectPropertyOperations.SetCreationInfoAdmin(obj.ObjVer, true, created_by, false, null);
+				doc.objVerEx.Vault.ObjectOperations.CheckIn(obj.ObjVer);
+			}
+
 			return new OT_Document() { objVerEx = new ObjVerEx(obj.Vault, obj) };
 		}
-		public static OT_Document create_multifile_doc(this OT_Document doc, params string[] files)
+		public static OT_Document create_multifile_doc(this OT_Document doc, int? createdby_mfuserid = null, params string[] files)
 		{
 			Vault vault = doc.objVerEx.Vault;
 			ObjVerEx version = doc.objVerEx;
@@ -454,7 +474,15 @@ namespace VAF
 				FileInfo fi = new FileInfo(file);
 				sourceFiles.AddFile(fi.Name.Replace(fi.Extension, ""), fi.Extension.Replace(".", ""), fi.FullName);
 			}
-			ObjectVersionAndProperties obj = vault.ObjectOperations.CreateNewObjectEx(OT_Document.TypeID, version.Properties, sourceFiles, false, true);
+			ObjectVersionAndProperties obj = vault.ObjectOperations.CreateNewObjectEx(OT_Document.TypeID, version.Properties, sourceFiles, false,
+				createdby_mfuserid == null);
+
+			if (createdby_mfuserid != null) {
+				TypedValue created_by = new TypedValue();
+				created_by.SetValue(MFDataType.MFDatatypeLookup, createdby_mfuserid.Value);
+				obj = doc.objVerEx.Vault.ObjectPropertyOperations.SetCreationInfoAdmin(obj.ObjVer, true, created_by, false, null);
+				doc.objVerEx.Vault.ObjectOperations.CheckIn(obj.ObjVer);
+			}
 
 			return new OT_Document() { objVerEx = new ObjVerEx(obj.Vault, obj) };
 		}

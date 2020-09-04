@@ -183,10 +183,15 @@ namespace ?namespace
 				return;
 
 			if (isBeforeCheckinOrBeforeCreateNewEventType) {
-				LastModifiedBy = new TypedValue();
+				//get last modified value before saving
+				PropertyValue last_modified_by = env.ObjVerEx.GetProperty(MFBuiltInPropertyDef.MFBuiltInPropertyDefLastModifiedBy);
+				if (last_modified_by == null)
+					last_modified_by = new PropertyValue();
+				if (last_modified_by.TypedValue.IsNULL())
+					last_modified_by.TypedValue.SetValue(MFDataType.MFDatatypeLookup, env.CurrentUserID);
+
 				env.ObjVerEx.SaveProperties();
-				LastModifiedBy.SetValue(MFDataType.MFDatatypeLookup, env.CurrentUserID);
-				env.Vault.ObjectPropertyOperations.SetLastModificationInfoAdmin(env.ObjVer, true, LastModifiedBy, false, null);
+				env.Vault.ObjectPropertyOperations.SetLastModificationInfoAdmin(env.ObjVer, true, last_modified_by.TypedValue, false, null);
 			}
 		}
 

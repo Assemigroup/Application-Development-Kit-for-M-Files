@@ -9,5 +9,6 @@ namespace VAF
 	public interface IAPIOperations
 	{
 		bool create();
+		bool create(int? createdby_mfuserid = null);
 	}
 }
