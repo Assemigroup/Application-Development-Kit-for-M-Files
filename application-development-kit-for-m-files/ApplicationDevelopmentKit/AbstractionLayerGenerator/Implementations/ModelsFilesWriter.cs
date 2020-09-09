@@ -260,8 +260,8 @@ namespace ApplicationDevelopmentKit
 			string ot_class_name = $"OT_{obj.Name.Normalize_to_cs_type()}";
 
 			// API Create method definition
-			apiMethodStrBldr.AppendLine("\t\tpublic bool create() {");
-			apiMethodStrBldr.AppendLine("\t\t\treturn objVerEx.create(TypeID);");
+			apiMethodStrBldr.AppendLine("\t\tpublic bool create(int? createdby_mfuserid = null) {");
+			apiMethodStrBldr.AppendLine("\t\t\treturn objVerEx.create(TypeID, createdby_mfuserid);");
 			apiMethodStrBldr.AppendLine("\t\t}");
 
 			// API Get method definition
@@ -298,8 +298,8 @@ namespace ApplicationDevelopmentKit
 						reqPropDefs.Select(propDef => Common.Return_type(propDef) + " " + propDef.Name.Normalize_to_cs_type(true))));
 
 					if ("Document" == obj.Name.Normalize_to_cs_type())
-						apiClassCnstrctrStrBldr.AppendLine("\t\t\t, string fileUploadPath");
-
+						apiClassCnstrctrStrBldr.AppendLine("\t\t\t\n, string fileUploadPath");
+					apiClassCnstrctrStrBldr.AppendLine("\t\t\t,int? createdby_mfuserid = null");
 					apiClassCnstrctrStrBldr.AppendLine("\t\t) {");
 					apiClassCnstrctrStrBldr.AppendLine(
 						$"\t\t\tOT_{obj.Name.Normalize_to_cs_type()} objInstance = new OT_{obj.Name.Normalize_to_cs_type()}() {{ objVerEx = new ObjVerEx(MFilesAPIConnection.Vault, new ObjectVersion(), new PropertyValues()) }};");
@@ -311,9 +311,9 @@ namespace ApplicationDevelopmentKit
 
 					reqPropDefs.ForEach(propDef => apiClassCnstrctrStrBldr.AppendLine($"\t\t\tobjInstance.{propDef.Name.Normalize_to_cs_type(true)} = {propDef.Name.Normalize_to_cs_type(true)};"));
 					if ("Document" == obj.Name.Normalize_to_cs_type()) {
-						apiClassCnstrctrStrBldr.AppendLine("\t\t\treturn objInstance.create_singlefile_doc(fileUploadPath);");
+						apiClassCnstrctrStrBldr.AppendLine("\t\t\treturn objInstance.create_singlefile_doc(fileUploadPath, createdby_mfuserid);");
 					} else {
-						apiClassCnstrctrStrBldr.AppendLine("\t\t\tobjInstance.create();");
+						apiClassCnstrctrStrBldr.AppendLine("\t\t\tobjInstance.create(createdby_mfuserid);");
 						apiClassCnstrctrStrBldr.AppendLine($"\t\t\tobjInstance = new OT_{obj.Name.Normalize_to_cs_type()} {{ objVerEx = new ObjVerEx(objInstance.objVerEx.Vault, objInstance.objVerEx.ObjVer) }};");
 						apiClassCnstrctrStrBldr.AppendLine("\t\t\treturn objInstance;");
 					}
@@ -333,13 +333,14 @@ namespace ApplicationDevelopmentKit
 					apiClassCnstrctrStrBldr.AppendLine(string.Join(",\n\t\t\t",
 						reqPropDefs.Select(propDef => Common.Return_type(propDef) + " " + propDef.Name.Normalize_to_cs_type(true))));
 					if ("Document" == obj.Name.Normalize_to_cs_type())
-						apiClassCnstrctrStrBldr.AppendLine("\t\t\t, string fileUploadPath");
+						apiClassCnstrctrStrBldr.AppendLine("\t\t\t\n, string fileUploadPath");
+					apiClassCnstrctrStrBldr.AppendLine("\t\t\t,int? createdby_mfuserid = null");
 					apiClassCnstrctrStrBldr.AppendLine("\t\t) {");
 					apiClassCnstrctrStrBldr.AppendLine($"\t\t\tOT_{obj.Name.Normalize_to_cs_type()} objInstance = new OT_{obj.Name.Normalize_to_cs_type()}() {{ objVerEx = new ObjVerEx(MFilesAPIConnection.Vault, new ObjectVersion(), new PropertyValues()) }};");
 					apiClassCnstrctrStrBldr.AppendLine(
 						$"\t\t\tobjInstance.Class = VL_Class.{classDef.Name.Normalize_to_cs_type(true)};");
 					reqPropDefs.ForEach(propDef => apiClassCnstrctrStrBldr.AppendLine($"\t\t\tobjInstance.{propDef.Name.Normalize_to_cs_type(true)} = {propDef.Name.Normalize_to_cs_type(true)};"));
-					apiClassCnstrctrStrBldr.AppendLine("\t\t\tobjInstance.create();");
+					apiClassCnstrctrStrBldr.AppendLine("\t\t\tobjInstance.create(createdby_mfuserid);");
 					apiClassCnstrctrStrBldr.AppendLine($"\t\t\tobjInstance = new OT_{obj.Name.Normalize_to_cs_type()} {{ objVerEx = new ObjVerEx(objInstance.objVerEx.Vault, objInstance.objVerEx.ObjVer) }};");
 					if ("Document" == obj.Name.Normalize_to_cs_type())
 						apiClassCnstrctrStrBldr.AppendLine($"\t\t\tobjInstance.upload_file<OT_Document>(fileUploadPath);");
