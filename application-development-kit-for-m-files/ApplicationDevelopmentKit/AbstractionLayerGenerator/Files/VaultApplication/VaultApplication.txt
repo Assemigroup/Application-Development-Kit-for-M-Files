@@ -104,7 +104,7 @@ namespace ?namespace
 			}
 		}
 	}
-	public class VaultApplication : VaultApplicationBase
+	public partial class VaultApplication : VaultApplicationBase
 	{
 		private static object_events _e = null;
 		public static Dictionary<int, List<int>> Deleting_Objects;
