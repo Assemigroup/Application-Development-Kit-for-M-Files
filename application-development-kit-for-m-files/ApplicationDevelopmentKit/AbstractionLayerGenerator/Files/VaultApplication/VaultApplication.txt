@@ -142,9 +142,7 @@ namespace ?namespace
 			bool event_processed = false;
 			int type = env.ObjVer.Type;
 			object obj;
-			TypedValue LastModifiedBy;
 			Dictionary<int, List<MethodInfo>> em = e.event_object_methods[etype];
-			EventHandler eventHandler;
 
 			// process object
 			if (em.ContainsKey(type) && e.object_lookup.ContainsKey(type)) {
@@ -156,8 +154,10 @@ namespace ?namespace
 						event_processed = true;
 						continue;
 					}
-					eventHandler = (EventHandler)Delegate.CreateDelegate(typeof(EventHandler), obj, m);
-					eventHandler.Invoke();
+					List<object> parameters = new List<object>();
+					if (m.GetParameters().Where(o => o.ParameterType == typeof(EventHandlerEnvironment)).FirstOrDefault() != null)
+						parameters.Add(env);
+					m.Invoke(obj, parameters.ToArray());
 					event_processed = true;
 				}
 			}
