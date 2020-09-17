@@ -157,7 +157,12 @@ namespace ?namespace
 					List<object> parameters = new List<object>();
 					if (m.GetParameters().Where(o => o.ParameterType == typeof(EventHandlerEnvironment)).FirstOrDefault() != null)
 						parameters.Add(env);
-					m.Invoke(obj, parameters.ToArray());
+					try {
+						m.Invoke(obj, parameters.ToArray());
+					}
+					catch (TargetInvocationException ex) {
+						throw ex.InnerException ?? ex;
+					}
 					event_processed = true;
 				}
 			}
