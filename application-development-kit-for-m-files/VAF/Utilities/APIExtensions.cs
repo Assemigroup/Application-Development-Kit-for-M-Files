@@ -239,11 +239,8 @@ namespace VAF
 			List<T> result = new List<T>();
 			if (objectSearchResults != null && objectSearchResults.Count > 0) {
 				IEnumerator searchResultObjVerEnum = objectSearchResults.GetAsObjectVersions().GetEnumerator();
-				ObjectVersion objectVersion = null;
-				searchResultObjVerEnum.MoveNext();
-				objectVersion = (ObjectVersion)searchResultObjVerEnum.Current;
-				ObjectVersionAndProperties objVerAndProps = vault.ObjectOperations.GetLatestObjectVersionAndProperties(objectVersion.ObjVer.ObjID, false);
-				result.Add(new T() { objVerEx = new ObjVerEx(vault, objVerAndProps) });
+				while (searchResultObjVerEnum.MoveNext())
+					result.Add(new T() { objVerEx = new ObjVerEx(vault, (ObjectVersion)searchResultObjVerEnum.Current) });
 			}
 			return result;
 		}
