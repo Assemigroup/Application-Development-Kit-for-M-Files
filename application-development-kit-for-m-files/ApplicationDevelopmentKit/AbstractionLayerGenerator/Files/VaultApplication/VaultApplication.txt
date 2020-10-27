@@ -109,6 +109,7 @@ namespace ?namespace
 		private static object_events _e = null;
 		public static Dictionary<int, List<int>> Deleting_Objects;
 		public delegate void EventHandler();
+		public delegate void EventHandlerWithEnv(EventHandlerEnvironment env);
 
 		public static object_events e {
 			get {
@@ -143,6 +144,8 @@ namespace ?namespace
 			int type = env.ObjVer.Type;
 			object obj;
 			Dictionary<int, List<MethodInfo>> em = e.event_object_methods[etype];
+			EventHandler eventHandler;
+			EventHandlerWithEnv eventHandlerWithEnv;
 
 			// process object
 			if (em.ContainsKey(type) && e.object_lookup.ContainsKey(type)) {
@@ -154,14 +157,13 @@ namespace ?namespace
 						event_processed = true;
 						continue;
 					}
-					List<object> parameters = new List<object>();
-					if (m.GetParameters().Where(o => o.ParameterType == typeof(EventHandlerEnvironment)).FirstOrDefault() != null)
-						parameters.Add(env);
-					try {
-						m.Invoke(obj, parameters.ToArray());
+					if (m.GetParameters().FirstOrDefault()?.ParameterType == typeof(EventHandlerEnvironment)) {
+						eventHandlerWithEnv = (EventHandlerWithEnv)Delegate.CreateDelegate(typeof(EventHandlerWithEnv), obj, m);
+						eventHandlerWithEnv(env);
 					}
-					catch (TargetInvocationException ex) {
-						throw ex.InnerException ?? ex;
+					else {
+						eventHandler = (EventHandler)Delegate.CreateDelegate(typeof(EventHandler), obj, m);
+						eventHandler();
 					}
 					event_processed = true;
 				}
