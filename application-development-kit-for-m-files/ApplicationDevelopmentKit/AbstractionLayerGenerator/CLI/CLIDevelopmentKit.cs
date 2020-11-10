@@ -34,6 +34,7 @@ namespace ApplicationDevelopmentKit
 				default: // New command
 					MFilesSettings = cliMfSettings;
 					MFilesSettings.SaveToXmlFile();
+					ConnectUsingCurrentSettings();
 					break;
 				}
 			} else {
