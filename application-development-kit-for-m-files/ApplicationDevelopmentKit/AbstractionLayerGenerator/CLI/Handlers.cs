@@ -1,4 +1,6 @@
-﻿namespace ApplicationDevelopmentKit
+﻿using System;
+
+namespace ApplicationDevelopmentKit
 {
 	public abstract class AbstractCommandHandler
 	{
@@ -36,7 +38,9 @@
 		{
 			Api api = new Api(MFDevelopmentKit);
 			AbstractionLayerGenerator alGenerator = new AbstractionLayerGenerator() { Api = api };
-			alGenerator.Generate();
+			if (MFDevelopmentKit is CLIDevelopmentKit)
+				alGenerator.NoPromptExit = true;
+			Environment.ExitCode = Convert.ToInt32(alGenerator.Generate());
 		}
 	}
 
@@ -45,7 +49,9 @@
 		public override void HandleCommand()
 		{
 			MFVaultApplicationInstaller mfVaultAppInstaller = new MFVaultApplicationInstaller(MFDevelopmentKit.MFilesSettings);
-			mfVaultAppInstaller.Run();
+			if (MFDevelopmentKit is CLIDevelopmentKit)
+				mfVaultAppInstaller.NoPromptExit = true;
+			Environment.ExitCode = Convert.ToInt32(mfVaultAppInstaller.Run());
 		}
 	}
 }
