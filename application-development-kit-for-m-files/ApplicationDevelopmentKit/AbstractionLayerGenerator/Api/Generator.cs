@@ -8,13 +8,12 @@ namespace ApplicationDevelopmentKit
 	public class AbstractionLayerGenerator
 	{
 		public Api Api { get; set; }
-
-		public void Generate()
+		public bool NoPromptExit { get; set; }
+		public bool Generate()
 		{
 			try {
 				if (Api == null)
-					return;
-
+					return false;
 				Console.WriteLine("\n+----------------------------+");
 				Console.WriteLine("| AbstractionLayer Generator |");
 				Console.WriteLine("+----------------------------+\n");
@@ -43,20 +42,24 @@ namespace ApplicationDevelopmentKit
 					alFilesWriter.WriteFiles(Api);
 					generatedALFiles = generatedALFiles.Union(alFilesWriter.GeneratedFiles).ToArray();
 				});
-				
 				Console.WriteLine($"[INFO] Successfully generated AbstractionLayer for vault <{Api.MFilesSettings.VaultName} ({Api.MFilesSettings.VaultGUID})>...");
 
 				DirectoryInfo mfTargetDirectoryInfo = ALFilesWriter.GetMFTargetDirectoryInfo();
 				Console.WriteLine($"[INFO] Adding generated AbstractionLayer files to <{mfTargetDirectoryInfo.Name}> project build...");
 				BuildUtils.IncludeFilesToProjectBuild(generatedALFiles);
 				Console.WriteLine($"[INFO] Successfully added generated AbstractionLayer files to <{mfTargetDirectoryInfo.Name}> project build...\n");
-			} catch {
-				Console.WriteLine($"[ERROR] Something wrong during execution of ALGenerator...");
+				return true;
+			} catch (Exception ex) {
+				Console.WriteLine($"[ERROR] Something went wrong during execution of ALGenerator. " + ex.Message);
 			} finally {
 				Api?.Dispose();
 			}
-			Console.WriteLine($"Press any key to exit...");
-			Console.ReadKey();
+			Console.WriteLine("[END]");
+			if (!NoPromptExit) {
+				Console.WriteLine($"Press any key to exit...");
+				Console.ReadKey();
+			}
+			return false;
 		}
 	}
 }

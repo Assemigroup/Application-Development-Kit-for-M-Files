@@ -6,7 +6,7 @@ using System.Text;
 using System.Xml.Linq;
 
 using Microsoft.Win32;
-using MFilesAPI; 
+using MFilesAPI;
 
 namespace ApplicationDevelopmentKit
 {
@@ -19,20 +19,21 @@ namespace ApplicationDevelopmentKit
         private static VaultsOnServer Vaults { get; set; }
         private static MFilesServerApplication MFilesServer { get; set; }
         private static AdminServerConnectionProperties SERVER_CONN { get; set; }
+        public bool NoPromptExit { get; set; }
         public static void RunTests(Vault vault) { }
 
         public MFVaultApplicationInstaller(MFilesSettings mfilesSettings)
         {
-			// Go through command prompt if M-Files settings option is empty
-			//Initialize();
-			MFilesSettings = mfilesSettings;
+            // Go through command prompt if M-Files settings option is empty
+            //Initialize();
+            MFilesSettings = mfilesSettings;
 
-		}
-        public void Run()
+        }
+        public bool Run()
         {
-			Console.WriteLine("\n+--------------+");
-			Console.WriteLine("| VAF Deployer |");
-			Console.WriteLine("+--------------+\n");
+            Console.WriteLine("\n+--------------+");
+            Console.WriteLine("| VAF Deployer |");
+            Console.WriteLine("+--------------+\n");
 
             DirectoryInfo vafDirectoryInfo = ALFilesWriter.GetMFTargetDirectoryInfo();
             string vafProjectFullPath = vafDirectoryInfo.FullName;
@@ -45,7 +46,7 @@ namespace ApplicationDevelopmentKit
 #if DEBUG
 			string appPathStr = Path.Combine(new string[]{ vafProjectFullPath, "bin", "Debug"});
 #else
-            string appPathStr = Path.Combine(new string[]{ vafProjectFullPath, "bin", "Release"});
+            string appPathStr = Path.Combine(new string[] { vafProjectFullPath, "bin", "Release" });
 #endif
             try {
                 Console.WriteLine($"[INFO] Building VAF project...");
@@ -58,7 +59,7 @@ namespace ApplicationDevelopmentKit
                 //Version version = typeof(VAF.VaultApplication).Assembly.GetName().Version;
                 File.WriteAllText(appDefFile.FullName, GenerateXmlFile(version.ToString()));
 
-			    string vault = MFilesSettings.VaultGUID;
+                string vault = MFilesSettings.VaultGUID;
                 if (string.IsNullOrWhiteSpace(vault))
                     vault = MFilesSettings.VaultName;
 
@@ -68,19 +69,20 @@ namespace ApplicationDevelopmentKit
                 FileInfo applicationPackage = vaeBuilder.CreateApplicationPackage(applicationGuid, applicationPath);
                 Console.WriteLine($"[INFO] Application package for {vault} created: " + applicationPackage);
 
-                if (MFilesSettings.Server != null && !string.IsNullOrWhiteSpace(vault))             {
+                if (MFilesSettings.Server != null && !string.IsNullOrWhiteSpace(vault)) {
                     ConnectAndReinstall(applicationGuid, applicationPackage);
                     Console.WriteLine($"[INFO] Completed deployment for vault <{MFilesSettings.VaultName} ({MFilesSettings.VaultGUID})>...\n");
-				    Console.WriteLine($"Press any key to exit...");
-				    Console.ReadKey();
-			    } else
+                    return true;
+                } else
                     Console.WriteLine("[INFO] Skipping installation:");
             } catch (Exception e) {
                 Console.WriteLine($"[ERROR] {e.Message}\n");
+            }
+            if (!NoPromptExit) {
                 Console.WriteLine($"Press any key to exit...");
                 Console.ReadKey();
-                return;
             }
+            return false;
         }
         public void Dispose()
         {
@@ -101,8 +103,7 @@ namespace ApplicationDevelopmentKit
             int numLabel = 1;
 
             Console.WriteLine("===Vault Application Deployer===");
-            while (true)
-            {
+            while (true) {
                 Console.WriteLine("Select server:");
                 adminServerConnPropsList.ForEach(serverConnProps => Console.WriteLine($"{numLabel++}. {serverConnProps.Alias}"));
 
@@ -121,50 +122,47 @@ namespace ApplicationDevelopmentKit
             Console.WriteLine("2. Windows user");
 
             string selectedAuthType = Console.ReadLine();
-            switch (selectedAuthType)
-            {
-                case "2":
-                    Console.WriteLine($"You have selected: Windows user\n");
-                    SERVER_CONN.AuthType = MFAuthType.MFAuthTypeSpecificWindowsUser;
-                    while (!isValidCredentials)
-                    {
-                        Console.WriteLine("Enter Domain:");
-                        SERVER_CONN.Domain = Console.ReadLine();
-                        if (SERVER_CONN.Domain == null)
-                            return;
+            switch (selectedAuthType) {
+            case "2":
+                Console.WriteLine($"You have selected: Windows user\n");
+                SERVER_CONN.AuthType = MFAuthType.MFAuthTypeSpecificWindowsUser;
+                while (!isValidCredentials) {
+                    Console.WriteLine("Enter Domain:");
+                    SERVER_CONN.Domain = Console.ReadLine();
+                    if (SERVER_CONN.Domain == null)
+                        return;
 
-                        Console.WriteLine("Enter Username:");
-                        SERVER_CONN.Username = Console.ReadLine();
-                        if (SERVER_CONN.Username == null)
-                            return;
+                    Console.WriteLine("Enter Username:");
+                    SERVER_CONN.Username = Console.ReadLine();
+                    if (SERVER_CONN.Username == null)
+                        return;
 
-                        Console.WriteLine("Enter Password:");
-                        SERVER_CONN.Password = GetConsolePassword();
-                        if (SERVER_CONN.Password == null)
-                            return;
+                    Console.WriteLine("Enter Password:");
+                    SERVER_CONN.Password = GetConsolePassword();
+                    if (SERVER_CONN.Password == null)
+                        return;
 
-                        isValidCredentials = TryConnect();
-                    }
-                    break;
-                case "1":
-                default:
-                    Console.WriteLine($"You have selected: M-Files user\n");
-                    SERVER_CONN.AuthType = MFAuthType.MFAuthTypeSpecificMFilesUser;
-                    while (!isValidCredentials)
-                    {
-                        Console.WriteLine("Enter Username:");
-                        SERVER_CONN.Username = Console.ReadLine();
-                        if (SERVER_CONN.Username == null)
-                            return;
+                    isValidCredentials = TryConnect();
+                }
+                break;
+            case "1":
+            default:
+                Console.WriteLine($"You have selected: M-Files user\n");
+                SERVER_CONN.AuthType = MFAuthType.MFAuthTypeSpecificMFilesUser;
+                while (!isValidCredentials) {
+                    Console.WriteLine("Enter Username:");
+                    SERVER_CONN.Username = Console.ReadLine();
+                    if (SERVER_CONN.Username == null)
+                        return;
 
-                        Console.WriteLine("Enter Password:");
-                        SERVER_CONN.Password = GetConsolePassword();
-                        if (SERVER_CONN.Password == null)
-                            return;
+                    Console.WriteLine("Enter Password:");
+                    SERVER_CONN.Password = GetConsolePassword();
+                    if (SERVER_CONN.Password == null)
+                        return;
 
-                        isValidCredentials = TryConnect();
-                    }
-                    break;
+                    isValidCredentials = TryConnect();
+                }
+                break;
             }
         }
         private static void InputVaultName()
@@ -292,8 +290,7 @@ namespace ApplicationDevelopmentKit
         private static void ReinstallApplication(FileInfo appFile, MFilesServerApplication server, VaultOnServer vaultOnServer, RetryingVaultConnection vaultConnection, string applicationGuid)
         {
             Console.WriteLine("[INFO] Checking for previous installation of the application...");
-            if (vaultConnection.DoWithReconnect(vault => IsApplicationInstalled(vault, applicationGuid)))
-            {
+            if (vaultConnection.DoWithReconnect(vault => IsApplicationInstalled(vault, applicationGuid))) {
                 Console.WriteLine("[INFO] Found previous installation of the application...");
                 Console.WriteLine("[INFO] Uninstalling the previous installation of the application...");
                 UninstallVAE(server, vaultOnServer, vaultConnection, applicationGuid);
@@ -314,11 +311,9 @@ namespace ApplicationDevelopmentKit
         }
         private static bool IsApplicationInstalled(Vault vault, string applicationGuid)
         {
-            try
-            {
+            try {
                 vault.CustomApplicationManagementOperations.GetCustomApplication(applicationGuid);
-            } catch (COMException ex)
-            {
+            } catch (COMException ex) {
                 if (IsMFilesNotFoundError(ex))
                     return false;
                 throw;
@@ -327,11 +322,9 @@ namespace ApplicationDevelopmentKit
         }
         private static bool TryUninstallCustomApplication(Vault vault, string appID)
         {
-            try
-            {
+            try {
                 vault.CustomApplicationManagementOperations.UninstallCustomApplication(appID);
-            } catch (COMException ex)
-            {
+            } catch (COMException ex) {
                 if (IsMFilesNotFoundError(ex))
                     return false;
                 throw;
@@ -344,9 +337,9 @@ namespace ApplicationDevelopmentKit
         }
         private static string GenerateXmlFile(string v)
         {
-			string projectName = ALFilesWriter.GetMFTargetDirectoryInfo().Name;
+            string projectName = ALFilesWriter.GetMFTargetDirectoryInfo().Name;
 
-			StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
             sb.AppendLine("<application");
             sb.AppendLine("			type=\"server-application\"");
