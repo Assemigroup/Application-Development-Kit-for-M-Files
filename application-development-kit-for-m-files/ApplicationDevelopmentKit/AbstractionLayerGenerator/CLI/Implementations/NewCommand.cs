@@ -17,6 +17,7 @@ namespace ApplicationDevelopmentKit
 		public string _Domain;
 		public string _UserName;
 		public string _Password;
+		public bool _SilentExit;
 
 		public NewCommand(
 			CommandLineOptions commandLineOpts,
@@ -28,7 +29,8 @@ namespace ApplicationDevelopmentKit
 			string authType,
 			string domain,
 			string userName,
-			string password)
+			string password,
+			bool silentExit)
 		{
 			_options = commandLineOpts;
 			_ProjectName = projectName;
@@ -40,6 +42,7 @@ namespace ApplicationDevelopmentKit
 			_Domain = domain;
 			_UserName = userName;
 			_Password = password;
+			_SilentExit = silentExit;
 		}
 
 		private bool IsEmpty()
@@ -71,6 +74,7 @@ namespace ApplicationDevelopmentKit
 					, Username = _UserName
 					, Password = _Password
 					, MFDevToolCommand = MFDevelopmentKitCommand.New
+					,SilentExit = _SilentExit
 				};
 			}
 

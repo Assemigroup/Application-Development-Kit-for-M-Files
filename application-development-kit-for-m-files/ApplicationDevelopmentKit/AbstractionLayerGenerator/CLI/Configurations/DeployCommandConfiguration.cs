@@ -18,11 +18,12 @@ namespace ApplicationDevelopmentKit
             var domainOption = commandLineApp.Option("--domain", "Windows domain, if selected authentication type is 'Windows'", CommandOptionType.SingleValue);
             var userNameOption = commandLineApp.Option("-u|--username", "Username", CommandOptionType.SingleValue);
             var passwordOption = commandLineApp.Option("-p|--password", "Password", CommandOptionType.SingleValue);
+			var silentexit = commandLineApp.Option("-se", "Silent(No Prompt) Exit", CommandOptionType.NoValue);
 
-            commandLineApp.OnExecute(() => {
-                commandLineOptions.Command = new DeployCommand(commandLineOptions, projectNameOption.Value(), serverNameOption.Value(), portOption.Value(),
-                    vaultNameOption.Value(), vaultGUIDOption.Value(), authTypeOption.Value(), domainOption.Value(), userNameOption.Value(), passwordOption.Value());
-                return 0;
+			commandLineApp.OnExecute(() => {
+				commandLineOptions.Command = new DeployCommand(commandLineOptions, projectNameOption.Value(), serverNameOption.Value(), portOption.Value(),
+					vaultNameOption.Value(), vaultGUIDOption.Value(), authTypeOption.Value(), domainOption.Value(), userNameOption.Value(), passwordOption.Value(), silentexit.Value() == "on");
+				return 0;
 			});
 		}
 	}

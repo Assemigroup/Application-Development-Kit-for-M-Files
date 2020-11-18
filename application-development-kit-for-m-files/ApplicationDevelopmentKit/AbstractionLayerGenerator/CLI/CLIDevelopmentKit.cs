@@ -30,6 +30,7 @@ namespace ApplicationDevelopmentKit
 						Console.WriteLine("[INFO] M-Files settings file exists...\n");
 						ConnectUsingCurrentSettings();
 					}
+					MFilesSettings.SilentExit = cliMfSettings.SilentExit;
 					break;
 				default: // New command
 					MFilesSettings = cliMfSettings;

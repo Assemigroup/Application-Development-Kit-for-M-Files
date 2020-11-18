@@ -19,7 +19,6 @@ namespace ApplicationDevelopmentKit
         private static VaultsOnServer Vaults { get; set; }
         private static MFilesServerApplication MFilesServer { get; set; }
         private static AdminServerConnectionProperties SERVER_CONN { get; set; }
-        public bool NoPromptExit { get; set; }
         public static void RunTests(Vault vault) { }
 
         public MFVaultApplicationInstaller(MFilesSettings mfilesSettings)
@@ -31,6 +30,7 @@ namespace ApplicationDevelopmentKit
         }
         public bool Run()
         {
+            bool result = false;
             Console.WriteLine("\n+--------------+");
             Console.WriteLine("| VAF Deployer |");
             Console.WriteLine("+--------------+\n");
@@ -72,17 +72,17 @@ namespace ApplicationDevelopmentKit
                 if (MFilesSettings.Server != null && !string.IsNullOrWhiteSpace(vault)) {
                     ConnectAndReinstall(applicationGuid, applicationPackage);
                     Console.WriteLine($"[INFO] Completed deployment for vault <{MFilesSettings.VaultName} ({MFilesSettings.VaultGUID})>...\n");
-                    return true;
+                    result = true;
                 } else
                     Console.WriteLine("[INFO] Skipping installation:");
             } catch (Exception e) {
                 Console.WriteLine($"[ERROR] {e.Message}\n");
             }
-            if (!NoPromptExit) {
+            if (!MFilesSettings.SilentExit) {
                 Console.WriteLine($"Press any key to exit...");
                 Console.ReadKey();
             }
-            return false;
+            return result;
         }
         public void Dispose()
         {

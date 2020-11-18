@@ -38,8 +38,6 @@ namespace ApplicationDevelopmentKit
 		{
 			Api api = new Api(MFDevelopmentKit);
 			AbstractionLayerGenerator alGenerator = new AbstractionLayerGenerator() { Api = api };
-			if (MFDevelopmentKit is CLIDevelopmentKit)
-				alGenerator.NoPromptExit = true;
 			Environment.ExitCode = Convert.ToInt32(alGenerator.Generate());
 		}
 	}
@@ -49,8 +47,6 @@ namespace ApplicationDevelopmentKit
 		public override void HandleCommand()
 		{
 			MFVaultApplicationInstaller mfVaultAppInstaller = new MFVaultApplicationInstaller(MFDevelopmentKit.MFilesSettings);
-			if (MFDevelopmentKit is CLIDevelopmentKit)
-				mfVaultAppInstaller.NoPromptExit = true;
 			Environment.ExitCode = Convert.ToInt32(mfVaultAppInstaller.Run());
 		}
 	}
