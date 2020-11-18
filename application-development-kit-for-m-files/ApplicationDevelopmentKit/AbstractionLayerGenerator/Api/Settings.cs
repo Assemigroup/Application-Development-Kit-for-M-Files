@@ -34,6 +34,7 @@ namespace ApplicationDevelopmentKit
 		public MFDevelopmentKitCommand MFDevToolCommand { get; set; }
 		public bool HasSettingsXmlFile { get; set; }
 		public bool IsValidSettings { get; set; }
+		public bool SilentExit { get; set; }
 
 		public MFilesSettings()
 		{

@@ -8,9 +8,9 @@ namespace ApplicationDevelopmentKit
 	public class AbstractionLayerGenerator
 	{
 		public Api Api { get; set; }
-		public bool NoPromptExit { get; set; }
 		public bool Generate()
 		{
+			bool result = false;
 			try {
 				if (Api == null)
 					return false;
@@ -48,18 +48,18 @@ namespace ApplicationDevelopmentKit
 				Console.WriteLine($"[INFO] Adding generated AbstractionLayer files to <{mfTargetDirectoryInfo.Name}> project build...");
 				BuildUtils.IncludeFilesToProjectBuild(generatedALFiles);
 				Console.WriteLine($"[INFO] Successfully added generated AbstractionLayer files to <{mfTargetDirectoryInfo.Name}> project build...\n");
-				return true;
+				result = true;
 			} catch (Exception ex) {
 				Console.WriteLine($"[ERROR] Something went wrong during execution of ALGenerator. " + ex.Message);
 			} finally {
 				Api?.Dispose();
 			}
 			Console.WriteLine("[END]");
-			if (!NoPromptExit) {
+			if (!Api.MFilesSettings.SilentExit) {
 				Console.WriteLine($"Press any key to exit...");
 				Console.ReadKey();
 			}
-			return false;
+			return result;
 		}
 	}
 }
