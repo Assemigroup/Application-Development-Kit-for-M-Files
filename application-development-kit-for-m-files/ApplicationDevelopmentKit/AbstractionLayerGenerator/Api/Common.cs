@@ -19,6 +19,8 @@ namespace ApplicationDevelopmentKit
 			Name = Name.Replace("%", "_Percentage_");
 			Name = Name.Replace("?", "_QuestionMark_");
 			Name = Name.Replace(".", "_dot_");
+			Name = Name.Replace(",", "_comma_");
+			Name = Name.Replace("'", "_apos_");
 			Name = Name.Replace(" ", "_");
 
 			foreach (char c in Name) {
