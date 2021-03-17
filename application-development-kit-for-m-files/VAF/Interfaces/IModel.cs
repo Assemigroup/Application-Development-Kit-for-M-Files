@@ -37,5 +37,25 @@ namespace VAF
 			Conditions.AddPropertyCondition<T>(value, cType);
 			return this;
 		}
+		public SearchParameters AddPDNullCheck<T>(bool is_null = true)
+			where T : IMFPropertyDefinition
+		{
+			int pd_id = (int)typeof(T).GetField("id").GetRawConstantValue();
+			MFDataType data_type = (MFDataType)typeof(T).GetField("data_type").GetRawConstantValue();
+			return this.AddPDNullCheck(pd_id, data_type, is_null);
+		}
+		public SearchParameters AddPDNullCheck(int property_def, MFDataType dataType, bool is_null = true)
+		{
+			TypedValue value = new TypedValue();
+			value.SetValueToNULL(dataType);
+			SearchCondition search = new SearchCondition();
+			search.Expression.DataPropertyValuePropertyDef = property_def;
+			Expression exp = new Expression();
+			exp.SetPropertyValueExpression(property_def, MFParentChildBehavior.MFParentChildBehaviorNone);
+			search.ConditionType = is_null ? MFConditionType.MFConditionTypeEqual : MFConditionType.MFConditionTypeNotEqual;
+			search.Set(exp, search.ConditionType, value);
+			this.Conditions.Add(1, search);
+			return this;
+		}
 	}
 }
