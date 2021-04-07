@@ -219,7 +219,7 @@ namespace VAF
 				}
 			}
 		}
-		public static List<T> search<T>(Vault vault, Action<SearchParameters> search, int? classId = null, bool includeDeleted = false)
+		public static List<T> search<T>(Vault vault, Action<SearchParameters> search, int? classId = null, bool includeDeleted = false, int max_result_count=500, int search_timeout_seconds = 60)
 			where T : IObjVerEx, new()
 		{
 			SearchParameters searchParameter = new SearchParameters();
@@ -229,7 +229,7 @@ namespace VAF
 				searchParameter.Conditions.ObjectClassID(classId.Value);
 			if (!includeDeleted)
 				searchParameter.Conditions.excludeDeleted();
-			return vault.ObjectSearchOperations.SearchForObjectsByConditionsEx(searchParameter.Conditions, MFSearchFlags.MFSearchFlagNone, false)
+			return vault.ObjectSearchOperations.SearchForObjectsByConditionsEx(searchParameter.Conditions, MFSearchFlags.MFSearchFlagNone, false, max_result_count, search_timeout_seconds)
 				.ConvertToOTObjects<T>(vault);
 		}
 
