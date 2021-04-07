@@ -274,8 +274,8 @@ namespace ApplicationDevelopmentKit
 			apiMethodStrBldr.AppendLine($"\t\t\treturn APIExtensions.getAll<{ot_class_name}>(MFilesAPIConnection.Vault, TypeID, includeDeleted, searchResultsCount);");
 			apiMethodStrBldr.AppendLine("\t\t}");
 
-			apiMethodStrBldr.AppendLine($"\t\tpublic static List<{ot_class_name}> search(Action<SearchParameters> parameters, int? classId = null, bool includeDeleted = false) {{");
-			apiMethodStrBldr.AppendLine($"\t\t\treturn APIExtensions.search<{ot_class_name}>(MFilesAPIConnection.Vault, parameters, classId, includeDeleted);");
+			apiMethodStrBldr.AppendLine($"\t\tpublic static List<{ot_class_name}> search(Action<SearchParameters> parameters, int? classId = null, bool includeDeleted = false, int max_result_count=500, int search_timeout_seconds = 60) {{");
+			apiMethodStrBldr.AppendLine($"\t\t\treturn APIExtensions.search<{ot_class_name}>(MFilesAPIConnection.Vault, parameters, classId, includeDeleted, max_result_count, search_timeout_seconds);");
 			apiMethodStrBldr.AppendLine("\t\t}");
 
 			return apiMethodStrBldr.ToString();
