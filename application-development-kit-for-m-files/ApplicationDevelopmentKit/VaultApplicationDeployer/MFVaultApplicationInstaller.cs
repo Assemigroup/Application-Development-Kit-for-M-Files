@@ -7,6 +7,7 @@ using System.Xml.Linq;
 
 using Microsoft.Win32;
 using MFilesAPI;
+using System.Reflection;
 
 namespace ApplicationDevelopmentKit
 {
@@ -49,19 +50,19 @@ namespace ApplicationDevelopmentKit
             string appPathStr = Path.Combine(new string[] { vafProjectFullPath, "bin", "Release" });
 #endif
             try {
+                string vault = MFilesSettings.VaultGUID;
+                if (string.IsNullOrWhiteSpace(vault))
+                    vault = MFilesSettings.VaultName;
+
                 Console.WriteLine($"[INFO] Building VAF project...");
                 BuildErrorConsoleLogger errorLogger = new BuildErrorConsoleLogger();
                 BuildUtils.BuildProject(errorLogger);
                 Console.WriteLine($"[INFO] Sucessfully built VAF project...");
                 DirectoryInfo applicationPath = new DirectoryInfo(appPathStr);
                 FileInfo appDefFile = new FileInfo(Path.Combine(applicationPath.FullName, "appdef.xml"));
-                Version version = new Version("1.0.0.0");
-                //Version version = typeof(VAF.VaultApplication).Assembly.GetName().Version;
-                File.WriteAllText(appDefFile.FullName, GenerateXmlFile(version.ToString()));
-
-                string vault = MFilesSettings.VaultGUID;
-                if (string.IsNullOrWhiteSpace(vault))
-                    vault = MFilesSettings.VaultName;
+                var vafAssembly = Assembly.LoadFile($"{appPathStr}\\VAF.dll");
+                Version vafVersion = vafAssembly.GetName().Version;
+                File.WriteAllText(appDefFile.FullName, GenerateXmlFile(MFilesSettings.VaultName, vafVersion.ToString()));
 
                 Console.WriteLine($"[INFO] Creating vault application package for <{vault}>...");
                 VAEBuilder vaeBuilder = new VAEBuilder();
@@ -335,7 +336,7 @@ namespace ApplicationDevelopmentKit
         {
             return exception is COMException && (exception.Message.IndexOf("(0x8004000B)") != -1 || exception.Message.IndexOf("(0x800408A4)") != -1);
         }
-        private static string GenerateXmlFile(string v)
+        private static string GenerateXmlFile(string vaultName, string version)
         {
             string projectName = ALFilesWriter.GetMFTargetDirectoryInfo().Name;
 
@@ -347,9 +348,9 @@ namespace ApplicationDevelopmentKit
             sb.AppendLine("			xsi:noNamespaceSchemaLocation=\"http://www.m-files.com/schemas/appdef-server-v1.xsd\">");
             sb.AppendLine("  <guid>ee54cadd-fd56-4092-ac43-007f844558ef</guid>");
             sb.AppendLine($"  <name>{projectName}</name>");
-            sb.AppendLine("  <description>VAF Vault Application</description>");
+            sb.AppendLine($"  <description>VAF Vault Application targeting {vaultName}</description>");
             sb.AppendLine("  <publisher></publisher>");
-            sb.AppendLine("  <version>1.0.0</version>");
+            sb.AppendLine($"  <version>{version}</version>");
             sb.AppendLine("  <copyright></copyright>");
             sb.AppendLine("  <extension-objects>");
             sb.AppendLine("    <extension-object>");
