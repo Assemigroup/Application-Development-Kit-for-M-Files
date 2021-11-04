@@ -444,12 +444,17 @@ namespace VAF
 			if (null == obj.objVerEx.PreviousVersion)
 				return false;
 
-			if (!obj.objVerEx.HasProperty(id)
-				|| !obj.objVerEx.PreviousVersion.HasProperty(id))
+			if (!obj.objVerEx.HasProperty(id))
 				return false;
 
 			PropertyValue curr = obj.objVerEx.GetProperty(id);
-			PropertyValue prev = obj.objVerEx.PreviousVersion.GetProperty(id);
+			PropertyValue prev = !obj.objVerEx.PreviousVersion.HasProperty(id) ? null : obj.objVerEx.PreviousVersion.GetProperty(id);
+			if (prev == null) {
+				prev = new PropertyValue();
+				prev.Value.SetValueToNULL(curr.Value.DataType);
+			}
+			if (curr.Value.IsNULL() && prev.Value.IsNULL())
+				return false;
 			if (curr.IsEqual(prev, EqualityCompareOptions.Default))
 				return false;
 
