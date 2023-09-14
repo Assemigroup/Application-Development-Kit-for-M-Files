@@ -56,14 +56,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventHandlers\Document.cs" />
     <Compile Include="Interfaces\IAPIOperations.cs" />
     <Compile Include="Interfaces\IMFEvent.cs" />
     <Compile Include="Interfaces\IModel.cs" />
+    <Compile Include="Interfaces\MFilesVault.cs" />
     <Compile Include="Models\MultiSelectOTProperty.cs" />
+    <Compile Include="Models\ObjectTypes.cs" />
+    <Compile Include="Models\PropertyDefinitions.cs" />
+    <Compile Include="Models\ValueLists.cs" />
+    <Compile Include="Models\VaultClasses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\APIExtensions.cs" />
     <Compile Include="Utilities\Extensions.cs" />
+    <Compile Include="Utilities\MFilesAPIConnection.cs" />
     <Compile Include="Utilities\PermissionExtensions.cs" />
+    <Compile Include="VaultApplication.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
