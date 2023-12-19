@@ -363,8 +363,13 @@ namespace VAF
 		{
 			if (objVerEx.HasProperty(id)) {
 				PropertyValue pv = objVerEx.GetProperty(id);
-				if (!pv.Value.IsNULL())
-					return (DateTime)objVerEx.GetProperty(id).Value.Value;
+				if (!pv.Value.IsNULL()) {
+					try {
+						return Convert.ToDateTime(objVerEx.GetProperty(id).Value.DisplayValue);
+					} catch {
+						return (DateTime)objVerEx.GetProperty(id).Value.Value;
+					}
+				}
 			}
 
 			return DateTime.MinValue;
